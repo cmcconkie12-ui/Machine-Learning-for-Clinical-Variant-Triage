@@ -234,5 +234,3 @@ models/
 
 # Local environments and datasets
 .venv/
-data/
-*.csv
