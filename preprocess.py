@@ -91,3 +91,21 @@ print("\nTarget balance in Train set:")
 print(y_train.value_counts(normalize=True).round(3))
 print("\nTarget balance in Test set:")
 print(y_test.value_counts(normalize=True).round(3))
+
+# --- STEP 6: Export Processed Data to CSV ---
+
+print("\nSaving processed train and test sets to /data...")
+
+# Combine features and target back into single DataFrames for clean saving
+train_df = X_train.copy()
+train_df["CLASS"] = y_train
+
+test_df = X_test.copy()
+test_df["CLASS"] = y_test
+
+# Export to CSV without the index column
+train_df.to_csv("data/train_processed.csv", index=False)
+test_df.to_csv("data/test_processed.csv", index=False)
+
+print(f"Saved: data/train_processed.csv ({train_df.shape[0]} rows, {train_df.shape[1]} cols)")
+print(f"Saved: data/test_processed.csv  ({test_df.shape[0]} rows, {test_df.shape[1]} cols)")
