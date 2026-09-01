@@ -3,6 +3,7 @@ from sklearn.metrics import classification_report, roc_auc_score, confusion_matr
 from sklearn.dummy import DummyClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
 
 # --- 1. Load Data ---
 print("Loading preprocessed training and test data...")
@@ -48,3 +49,20 @@ evaluate_model("Logistic Regression (Balanced)", log_reg, X_test, y_test)
 rf = RandomForestClassifier(n_estimators=100, class_weight="balanced", random_state=42, n_jobs=-1)
 rf.fit(X_train, y_train)
 evaluate_model("Random Forest (100 Trees, Balanced)", rf, X_test, y_test)
+
+# --- 6. Model 4: XGBoost ---
+scale_pos_weight = (y_train == 0).sum() / (y_train == 1).sum()
+
+xgb = XGBClassifier(
+    n_estimators=150,
+    learning_rate=0.05,
+    max_depth=6,
+    scale_pos_weight=scale_pos_weight,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    random_state=42,
+    n_jobs=-1,
+    eval_metric="logloss"
+)
+xgb.fit(X_train, y_train)
+evaluate_model("XGBoost (Gradient Boosted Trees)", xgb, X_test, y_test)
